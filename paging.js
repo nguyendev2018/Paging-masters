@@ -22,27 +22,31 @@ function renderProduct() {
     $("#product").innerHTML = content;
     return content;
 }
-function renderListPage(totalPage) {
+function renderListPage() {
+    let totalPage = Math.ceil(listProduct.length / itemPage);
+
     let content = "";
     for (let i = 1; i < totalPage; i++) {
-        content += `<li class="list ${i === currentPage ? "active" : ""}"><a>${i}</a></li>`
+        content += `<li class=" ${i === currentPage ? "active" : ""}" data-index=${i}><a>${i}</a></li>`
     }
     $(".number-page").innerHTML = content;
+
 }
 
 function changePage() {
-    const listButton = $$(".number-page li")
-    console.log(listButton);
+    const listButton = $$(".number-page li");
+    listButton.forEach(element => {
+        element.addEventListener("click", function (e) {
+            currentPage = Number(element.getAttribute("data-index"));
+            renderListPage()
+        })
+    });
     const a = $$(".number-page li a");
 
-}
-
-function initRender() {
-    let totalPage = Math.ceil(listProduct.length / itemPage);
-    renderProduct();
-    renderListPage(totalPage)
-}
-changePage();
+};
 (() => {
-    initRender();
+    renderProduct();
+    renderListPage();
+    changePage();
 })()
+
